@@ -44,3 +44,23 @@ jobs:
           python -c "from cream_typer.backend import HotkeyListener, Paster, Tray; print('backend OK')"
       - name: Pytest
         run: pytest -q
+
+  test-windows:
+    name: Test (Windows)
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+          cache: pip
+      - name: Install package + dev deps
+        run: |
+          pip install --upgrade pip
+          pip install -e ".[windows,dev]"
+      - name: Smoke import
+        run: |
+          python -c "from cream_typer import config, recorder, transcriber; print('imports OK')"
+          python -c "from cream_typer.backend import HotkeyListener, Paster, Tray; print('backend OK')"
+      - name: Pytest
+        run: pytest -q

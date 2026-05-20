@@ -35,6 +35,14 @@ def test_macos_backend_imports():
     from cream_typer.backend import HotkeyListener, Paster, Tray  # noqa: F401
 
 
-@pytest.mark.skipif(sys.platform != "darwin", reason="app.py pulls in the macOS backend")
+@pytest.mark.skipif(sys.platform != "win32", reason="Windows-only backend")
+def test_windows_backend_imports():
+    from cream_typer.backend import HotkeyListener, Paster, Tray  # noqa: F401
+
+
+@pytest.mark.skipif(
+    sys.platform not in ("darwin", "win32"),
+    reason="app.py pulls in a platform backend",
+)
 def test_app_imports():
     from cream_typer.app import VoiceTyper, main  # noqa: F401

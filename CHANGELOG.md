@@ -6,6 +6,13 @@ adheres to [Semantic Versioning](https://semver.org/).
 
 ## [Unreleased]
 
+### Added
+- **Windows backend** (`src/backend/_windows.py`): full port using `pynput` (Caps Lock hotkey + Ctrl+V paste), `pyperclip` (clipboard save/restore), and `pystray` + `Pillow` (system-tray icon with language submenu).
+- Windows CI job (`test-windows` on `windows-latest`).
+- `scripts/whisper_server.ps1` — PowerShell launcher for the whisper.cpp server on Windows.
+- Windows-specific unit tests (`tests/test_windows_backend.py`).
+- Cross-platform `Makefile` (`install` target auto-detects Windows/macOS/Linux extras).
+
 ### Fixed
 - Crash (`Abort trap: 6` / NSException) when the transcription "too short" branch fired. Tray UI updates (`set_title`, `set_status`, checkmark refresh) were happening on background threads (CGEventTap CFRunLoop, `_finish` daemon, whisper health check); AppKit requires `NSStatusItem` / `NSMenuItem` mutations on the main thread. Now wrapped in `PyObjCTools.AppHelper.callAfter`.
 

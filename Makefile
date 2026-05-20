@@ -10,7 +10,14 @@ WHISPER_MODEL      ?= $(WHISPER_DIR)/models/ggml-$(WHISPER_MODEL_NAME).bin
 WHISPER_PORT       ?= 8080
 WHISPER_LANG       ?= en
 
-PY = . venv/bin/activate &&
+# Cross-platform venv activation.
+ifeq ($(OS),Windows_NT)
+  PY = .\venv\Scripts\activate &&
+  VENV_BIN = venv\Scripts
+else
+  PY = . venv/bin/activate &&
+  VENV_BIN = venv/bin
+endif
 
 # ── User-facing targets ─────────────────────────────────────────────────────
 
@@ -24,10 +31,16 @@ setup: install whisper-build whisper-model
 venv:
 	@test -d venv || python3 -m venv venv
 
-# Editable install with macOS- and dev-extras.
+# Editable install with platform-specific and dev extras.
 install: venv
 	$(PY) pip install -q --upgrade pip
+ifeq ($(OS),Windows_NT)
+	$(PY) pip install -q -e ".[windows,dev]"
+else ifeq ($(shell uname),Darwin)
 	$(PY) pip install -q -e '.[macos,dev]'
+else
+	$(PY) pip install -q -e '.[linux,dev]'
+endif
 
 run:
 	$(PY) python -m cream_typer

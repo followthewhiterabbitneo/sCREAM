@@ -1,0 +1,134 @@
+[build-system]
+requires = ["setuptools>=68", "wheel"]
+build-backend = "setuptools.build_meta"
+
+# ─────────────────────────────────────────────────────────────────────────────
+# Project metadata
+# ─────────────────────────────────────────────────────────────────────────────
+[project]
+name = "cream-typer"
+version = "0.1.0"
+description = "Voice translation in any direction, locally on Apple Silicon. Tap Caps Lock, speak any language, get any other."
+readme = "README.md"
+requires-python = ">=3.10"
+license = { file = "LICENSE" }
+authors = [
+    { name = "NeCL", email = "neclcompany@gmail.com" },
+]
+keywords = [
+    "whisper",
+    "voice-to-text",
+    "dictation",
+    "stt",
+    "macos",
+    "menubar",
+    "translation",
+    "apple-silicon",
+    "local-ai",
+]
+classifiers = [
+    "Development Status :: 4 - Beta",
+    "Environment :: MacOS X",
+    "Intended Audience :: End Users/Desktop",
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: MacOS :: MacOS X",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3 :: Only",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Topic :: Multimedia :: Sound/Audio :: Speech",
+    "Topic :: Office/Business",
+]
+dependencies = [
+    "numpy>=1.24",
+    "requests>=2.31",
+    "sounddevice>=0.4.6",
+]
+
+[project.optional-dependencies]
+macos = [
+    "rumps>=0.4.0",
+    "pyobjc-framework-Quartz>=10.0",
+]
+# Reserved for upcoming Windows/Linux backends.
+windows = [
+    "pynput>=1.7",
+    "pyperclip>=1.8",
+    "pystray>=0.19",
+    "Pillow>=10.0",
+]
+linux = [
+    "pynput>=1.7",
+    "pyperclip>=1.8",
+    "pystray>=0.19",
+    "Pillow>=10.0",
+]
+dev = [
+    "pytest>=7.4",
+    "pytest-mock>=3.12",
+    "ruff>=0.4",
+]
+
+[project.scripts]
+cream-typer = "cream_typer.app:main"
+
+[project.urls]
+Homepage = "https://neclco.com"
+Source = "https://github.com/adjacentai/cream-typer"
+Issues = "https://github.com/adjacentai/cream-typer/issues"
+Changelog = "https://github.com/adjacentai/cream-typer/blob/main/CHANGELOG.md"
+
+# ─────────────────────────────────────────────────────────────────────────────
+# Setuptools — package files live directly in `src/`, mapped to `cream_typer`.
+# ─────────────────────────────────────────────────────────────────────────────
+[tool.setuptools]
+packages = ["cream_typer", "cream_typer.backend"]
+
+[tool.setuptools.package-dir]
+cream_typer = "src"
+
+# ─────────────────────────────────────────────────────────────────────────────
+# Ruff — lint + format
+# ─────────────────────────────────────────────────────────────────────────────
+[tool.ruff]
+line-length = 100
+target-version = "py310"
+src = ["src", "tests"]
+
+[tool.ruff.lint]
+select = [
+    "E",    # pycodestyle
+    "F",    # pyflakes
+    "I",    # isort
+    "N",    # pep8-naming
+    "UP",   # pyupgrade
+    "B",    # bugbear
+    "SIM",  # simplify
+    "RUF",  # ruff-specific
+]
+ignore = [
+    "E501",   # long lines — not blocking, leave it to the author's judgment
+    "RUF001", # ambiguous unicode in strings — language picker uses non-ASCII endonyms
+    "RUF002", # same, in docstrings
+    "RUF003", # same, in comments
+]
+
+[tool.ruff.lint.per-file-ignores]
+"tests/*" = ["N802"]  # test method names don't have to follow pep8-naming
+
+[tool.ruff.lint.isort]
+known-first-party = ["cream_typer"]
+
+[tool.ruff.format]
+quote-style = "double"
+indent-style = "space"
+
+# ─────────────────────────────────────────────────────────────────────────────
+# Pytest
+# ─────────────────────────────────────────────────────────────────────────────
+[tool.pytest.ini_options]
+minversion = "7.0"
+testpaths = ["tests"]
+addopts = "-ra --strict-markers"
+filterwarnings = ["error"]

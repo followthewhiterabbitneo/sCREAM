@@ -1,0 +1,8 @@
+blank_issues_enabled: false
+contact_links:
+  - name: 💬 Telegram (urgent questions)
+    url: https://t.me/ownerai
+    about: Need a quick answer? Ping us here.
+  - name: 🌐 NeCL — custom development
+    url: https://neclco.com
+    about: Need Whisper / RAG / voice agents integrated into your product?
